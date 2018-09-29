@@ -23,8 +23,9 @@ export default {
       sourcemap: true
     }
   ],
+  external: [ 'styled-components' ],
   plugins: [
-    external(),
+      external(),
     postcss({
       modules: true,
       writeDefinitions: true
@@ -34,6 +35,11 @@ export default {
     typescript({
       rollupCommonJSResolveHack: true
     }),
-    commonjs()
+    commonjs({
+      include: 'node_modules/**',
+      namedExports: {
+        'node_modules/react-is/index.js': ['isValidElementType']
+      }
+    })
   ]
 }
