@@ -4,9 +4,8 @@ import { prefixCls } from '../Config';
 import { base, mask, close, dialog, effect } from './Components';
 
 export const Container = styled.div`
-  ${base};
-  
   .${prefixCls} {
+    ${base};
     ${mask};
     ${dialog};
     ${close};

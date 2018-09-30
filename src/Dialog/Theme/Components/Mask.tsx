@@ -9,7 +9,7 @@ export const mask = css`
     right: 0;
     left: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.65); // lesshint duplicateProperty: false
+    background-color: #37373799; // lesshint duplicateProperty: false
     height: 100%;
     z-index: ${zindexModal};
     filter: ~"alpha(opacity=50)";
