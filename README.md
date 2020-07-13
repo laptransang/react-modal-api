@@ -1,31 +1,30 @@
-# react-modal-api
+# test
 
-> React Modal Api
+> Made with create-react-library
 
-[![NPM](https://img.shields.io/npm/v/react-modal-api.svg)](https://www.npmjs.com/package/react-modal-api) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/test.svg)](https://www.npmjs.com/package/test) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
 ```bash
-npm install --save react-modal-api
+npm install --save test
 ```
 
 ## Usage
 
 ```tsx
-import * as React from 'react'
+import React, { Component } from 'react'
 
-import MyComponent from 'react-modal-api'
+import MyComponent from 'test'
+import 'test/dist/index.css'
 
-class Example extends React.Component {
-  render () {
-    return (
-      <MyComponent />
-    )
+class Example extends Component {
+  render() {
+    return <MyComponent />
   }
 }
 ```
 
 ## License
 
-MIT © [laptransang](https://github.com/laptransang)
+MIT © [](https://github.com/)
