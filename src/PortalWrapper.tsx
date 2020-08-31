@@ -1,47 +1,23 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 
+import { getParent } from './utils/container';
 import Portal from './Portal';
 
-interface PortalWrapper {
+type Props = {
   visible: boolean;
-  forceRender?: boolean;
-  children: React.ReactNode;
+  getContainer?: any;
+  children: any;
 }
 
-const windowIsUndefined = !(
-  typeof window !== 'undefined' &&
-  window.document &&
-  window.document.createElement
-);
-
-const getParent = (getContainer: any) => {
-  if (windowIsUndefined) {
-    return null;
-  }
-  if (getContainer) {
-    if (typeof getContainer === 'string') {
-      return document.querySelectorAll(getContainer)[0];
-    }
-    if (typeof getContainer === 'function') {
-      return getContainer();
-    }
-  }
-  return document.body;
-};
-
-function PortalWrapper(props: PortalWrapper) {
-  const { visible, forceRender, children } = props;
-  const container = useRef(null);
-  const component = useRef(null);
+function PortalWrapper(props: Props) {
+  const { visible, children, getContainer } = props;
   const portal = useRef(null);
+  const container = useRef(null);
 
-  function getContainer() {
-    if (windowIsUndefined) {
-      return null;
-    }
+  function getCurrentContainer() {
     if (!container.current) {
       container.current = document.createElement('div');
-      const parent = getParent(null);
+      const parent = getParent(getContainer);
       if (parent) {
         parent.appendChild(container.current);
       }
@@ -50,29 +26,9 @@ function PortalWrapper(props: PortalWrapper) {
     return container.current;
   }
 
-  function savePortal(c: any) {
-    console.log('c', c);
-    component.current = c;
-  }
-
-  useEffect(() => {
-    return () => {
-      if (container && container.current) {
-        container.current.parentNode.removeChild(container.current);
-      }
-    }
-  }, [])
-
-  if (!visible) {
-    return null;
-  }
-
-  if (forceRender || visible || component.current) {
+  if (visible || portal.current) {
     portal.current = (
-      <Portal
-        getContainer={getContainer}
-        ref={savePortal}
-      >
+      <Portal getContainer={getCurrentContainer}>
         {children}
       </Portal>
     );

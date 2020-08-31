@@ -1,36 +1,31 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 interface IPortal {
-  getContainer: any;
-  ref: any;
+  getContainer?: any;
+  ref?: any;
+  children: any;
 }
 
-export default class Portal extends React.Component<IPortal> {
-  private _container: any;
-  componentDidMount() {
-    this.createContainer();
-  }
+const Portal= (props: IPortal) => {
+  const [ container, setContainer ] = useState(null);
+  const { children, getContainer } = props;
 
-  componentWillUnmount() {
-    this.removeContainer();
-  }
+  useEffect(() => {
+    setContainer(getContainer());
 
-  createContainer() {
-    this._container = this.props.getContainer();
-    this.forceUpdate();
-  }
-
-  removeContainer() {
-    if (this._container) {
-      this._container.parentNode.removeChild(this._container);
+    return () => {
+      if (container) {
+        container.parentNode.removeChild(container.current);
+      }
     }
+  }, [])
+
+  if (container) {
+    return ReactDOM.createPortal(children, container);
   }
 
-  render() {
-    if (this._container) {
-      return ReactDOM.createPortal(this.props.children, this._container);
-    }
-    return null;
-  }
+  return null;
 }
+
+export default Portal;
