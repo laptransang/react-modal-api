@@ -1,8 +1,10 @@
-.react-modal-api {
+$prefixCls: 'react-modal-api';
+
+.#{$prefixCls} {
   margin: 1.75rem auto;
 }
 
-.react-modal-api-mask {
+.#{$prefixCls}-mask {
   z-index: 1000;
   top: 0;
   left: 0;
@@ -12,12 +14,12 @@
   height: 100%;
   background-color: #00000073;
   filter: alpha(opacity=50);
-}
-.react-modal-api-mask--hidden {
-  display: none;
+  &--hidden {
+    display: none;
+  }
 }
 
-.react-modal-api-wrap {
+.#{$prefixCls}-wrap {
   position: fixed;
   top: 0;
   right: 0;
@@ -26,12 +28,12 @@
   overflow: auto;
   outline: 0;
   z-index: 1000;
-}
-.react-modal-api-wrap--hidden {
-  display: none;
+  &--hidden {
+    display: none;
+  }
 }
 
-.react-modal-api-content {
+.#{$prefixCls}-content {
   position: relative;
   background-color: #fff;
   background-clip: padding-box;
@@ -41,4 +43,3 @@
   pointer-events: auto;
 }
 
-/*# sourceMappingURL=styles.css.map */
