@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "dist",
+    "baseUrl": "./src/",
     "module": "esnext",
+    "target": "es5",
     "lib": ["dom", "esnext"],
     "moduleResolution": "node",
     "jsx": "react",
