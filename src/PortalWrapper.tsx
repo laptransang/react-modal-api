@@ -1,7 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import { getParent } from './utils/container';
 import Portal from './Portal';
+import store from './store';
+import switchScrollingEffect from './utils/switchScrollingEffect';
 
 type Props = {
   visible: boolean;
@@ -25,6 +27,15 @@ function PortalWrapper(props: Props) {
 
     return container.current;
   }
+
+  useEffect(() => {
+    if (visible) {
+      store.setOpenCount(store.openCount + 1);
+      if (store.openCount === 1) {
+        switchScrollingEffect();
+      }
+    }
+  }, [visible])
 
   if (visible || portal.current) {
     portal.current = (

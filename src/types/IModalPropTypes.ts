@@ -9,6 +9,8 @@ interface IModalPropTypes {
   keyboard?: boolean;
   onClose: (e: SyntheticEvent<HTMLDivElement>) => any;
   padding?: Array<string> | number;
+  centered?: boolean;
+  closeIcon?: ReactNode;
 }
 
 export { IModalPropTypes }

@@ -1,5 +1,5 @@
 /**
- *
+ * getParent
  * @param getContainer
  */
 function getParent(getContainer: any) {
@@ -20,4 +20,11 @@ function getParent(getContainer: any) {
   return document.body;
 }
 
-export { getParent }
+/**
+ * getScrollbarWidth
+ */
+function getScrollbarWidth() {
+  return window.innerWidth - document.documentElement.clientWidth;
+}
+
+export { getParent, getScrollbarWidth }

@@ -1,5 +1,25 @@
 .react-modal-api {
-  margin: 1.75rem auto;
+  margin: 0 auto;
+  position: relative;
+  top: 30px;
+  width: 100%;
+}
+
+.react-modal-api-centered {
+  text-align: center;
+}
+.react-modal-api-centered::before {
+  display: inline-block;
+  width: 0;
+  height: 100%;
+  vertical-align: middle;
+  content: "";
+}
+.react-modal-api-centered .react-modal-api {
+  top: 0;
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }
 
 .react-modal-api-mask {

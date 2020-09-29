@@ -4,19 +4,27 @@ import PortalWrapper from './PortalWrapper';
 import KeyCode from './utils/KeyCode';
 import { IModalPropTypes } from './types/IModalPropTypes';
 import './styles.css';
+import store from './store';
+import switchScrollingEffect from './utils/switchScrollingEffect';
+import classNames from './utils/classNames';
+import CloseIcon from 'components/CloseIcon';
+import Mask from 'components/Mask';
 
 function Modal(props: IModalPropTypes) {
   const {
     width,
     onClose,
+    centered,
     visible,
     keyboard,
     children,
     prefixCls,
+    closeIcon,
     destroyOnClose
   } = props;
-  const startBoundary = useRef(null);
-  const endBoundary = useRef(null);
+  const modalRootRef = useRef(null);
+  const startBoundaryRef = useRef(null);
+  const endBoundaryRef = useRef(null);
   const boundaryStyle = { width: 0, height: 0, overflow: 'hidden', outline: 'none' };
 
   function handleKeyDown(e: any) {
@@ -30,18 +38,18 @@ function Modal(props: IModalPropTypes) {
     if (visible && e.keyCode === KeyCode.TAB) {
       const { activeElement } = document;
 
-      if (e.shiftKey) {
-        if (activeElement === startBoundary.current) {
-          endBoundary.current.focus();
-        }
-      } else if (activeElement === endBoundary.current) {
-        startBoundary.current.focus();
+      if (e.shiftKey && activeElement === startBoundaryRef.current) {
+        endBoundaryRef.current.focus();
+      } else if (! e.shiftKey && activeElement === endBoundaryRef.current) {
+        startBoundaryRef.current.focus();
       }
     }
   }
 
-  function close(e: any) {
+  function close(e: any): void {
     if (onClose) {
+      store.setOpenCount(store.openCount - 1);
+      switchScrollingEffect({ close: true });
       onClose(e);
     }
   }
@@ -55,22 +63,22 @@ function Modal(props: IModalPropTypes) {
   if (visible || !destroyOnClose) {
     return (
       <PortalWrapper visible={visible}>
-        <div className={`${prefixCls}-root`}>
-          <div className={`${prefixCls}-mask ${!visible && `${prefixCls}-mask--hidden`}`} />
-          <div className={`${prefixCls}-wrap ${!visible && `${prefixCls}-wrap--hidden`}`} tabIndex={-1} role="dialog" onKeyDown={handleKeyDown} onClick={handleWrapClick}>
+        <div className={`${prefixCls}-root`} ref={modalRootRef}>
+          <Mask prefixCls={prefixCls} visible={visible} />
+          <div className={classNames(`${prefixCls}-wrap`, {[`${prefixCls}-wrap--hidden`]: !visible, [`${prefixCls}-centered`]: centered})} tabIndex={-1} role="dialog" onKeyDown={handleKeyDown} onClick={handleWrapClick}>
             <div className={`${prefixCls}`} role="document" style={{ maxWidth: width }}>
-              <div ref={startBoundary} tabIndex={0} aria-hidden="true" style={boundaryStyle} />
+              <div ref={startBoundaryRef} tabIndex={0} aria-hidden="true" style={boundaryStyle} />
               <div className={`${prefixCls}-content`}>
+                <CloseIcon prefixCls={prefixCls} onClick={close} closeIcon={closeIcon} />
                 {children}
               </div>
-              <div ref={endBoundary} tabIndex={0} aria-hidden="true" style={boundaryStyle} />
+              <div ref={endBoundaryRef} tabIndex={0} aria-hidden="true" style={boundaryStyle} />
             </div>
           </div>
         </div>
       </PortalWrapper>
     );
   }
-
   return null;
 }
 
