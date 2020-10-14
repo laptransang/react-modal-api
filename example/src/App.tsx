@@ -14,7 +14,7 @@ const App = () => {
     <>
       {visible ? 'TRUE' : 'FALSE'}
       <button onClick={() => { setVisible((!visible)) }}>Toggle Modal</button>
-      <div style={{ backgroundColor: 'grey', height: '120vh' }}>Hello</div>
+      <div style={{ backgroundColor: 'green', height: '120vh' }}>Hello</div>
       <Modal visible={visible} destroyOnClose={false} onClose={handleOnClose}>
         <h1>Hello world 1</h1>
         <input type="password" />

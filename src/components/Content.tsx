@@ -24,6 +24,7 @@ const Content = forwardRef<ContentRef, ContentProps>((props, ref) => {
   useImperativeHandle(ref, () => ({
     changeActive: (next: boolean) => {
       const { activeElement } = document;
+
       if (next && activeElement === contentEndRef.current) {
         contentStartRef.current.focus();
       } else if (!next && activeElement === contentStartRef.current) {

@@ -1,14 +1,15 @@
-import React, { MouseEvent, ReactNode } from 'react';
-import classNames from '../utils/classNames';
-import KeyCode from '../utils/KeyCode';
+import React, { ReactNode } from 'react';
+
+import classNames from 'utils/classNames';
+import KeyCode from 'utils/KeyCode';
 
 type Props = {
   prefixCls: string;
   visible: boolean;
   centered?: boolean;
   keyboard?: boolean;
-  onClose: (event: MouseEvent<HTMLButtonElement>) => void;
-  onFocus?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClose: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  onFocus?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   children: ReactNode;
 }
 
@@ -21,7 +22,7 @@ function Wrap(props: Props) {
     }
   }
 
-  function handleKeyDown(e: any) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (keyboard && e.keyCode === KeyCode.ESC) {
       e.stopPropagation();
       onClose(e);
@@ -31,13 +32,18 @@ function Wrap(props: Props) {
     // keep focus inside dialog
     if (visible && e.keyCode === KeyCode.TAB) {
       if (onFocus) {
-        onFocus(e.shiftKey);
+        onFocus(e);
       }
     }
   }
 
   return (
-    <div className={classNames(`${prefixCls}-wrap`, {[`${prefixCls}-wrap--hidden`]: !visible, [`${prefixCls}-centered`]: centered})} tabIndex={-1} role="dialog" onKeyDown={handleKeyDown} onClick={handleWrapClick}>
+    <div
+      tabIndex={-1}
+      className={classNames(`${prefixCls}-wrap`, {[`${prefixCls}-centered`]: centered})} role="dialog"
+      onKeyDown={handleKeyDown}
+      onClick={handleWrapClick}
+    >
       {children}
     </div>
   )

@@ -1,4 +1,4 @@
-import { ReactNode, SyntheticEvent } from 'react';
+import { ReactNode, MouseEvent, KeyboardEvent } from 'react';
 
 interface IModalPropTypes {
   children: ReactNode;
@@ -7,7 +7,7 @@ interface IModalPropTypes {
   prefixCls?: string;
   width?: number;
   keyboard?: boolean;
-  onClose: (e: SyntheticEvent<HTMLDivElement>) => any;
+  onClose: (e: KeyboardEvent | MouseEvent) => any;
   padding?: Array<string> | number;
   centered?: boolean;
   closeIcon?: ReactNode;

@@ -1,8 +1,11 @@
 .react-modal-api {
   margin: 0 auto;
   position: relative;
-  top: 30px;
   width: 100%;
+  transform: scale(0.7);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  top: 0;
 }
 
 .react-modal-api-centered {
@@ -24,17 +27,17 @@
 
 .react-modal-api-mask {
   z-index: 1000;
-  top: 0;
+  top: -100vh;
   left: 0;
   right: 0;
   bottom: 0;
   position: fixed;
+  width: 100%;
   height: 100%;
   background-color: #00000073;
-  filter: alpha(opacity=50);
-}
-.react-modal-api-mask--hidden {
-  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  visibility: hidden;
 }
 
 .react-modal-api-wrap {
@@ -46,8 +49,6 @@
   overflow: auto;
   outline: 0;
   z-index: 1000;
-}
-.react-modal-api-wrap--hidden {
   display: none;
 }
 
@@ -59,6 +60,39 @@
   border-radius: 2px;
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
   pointer-events: auto;
+}
+
+.react-modal-api-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  color: #00000073;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  background: none;
+}
+.react-modal-api-close:hover {
+  color: #000000bf;
+  text-decoration: none;
+}
+
+.react-modal-api-visible .react-modal-api-mask {
+  opacity: 1;
+  visibility: visible;
+  top: 0;
+}
+.react-modal-api-visible .react-modal-api-wrap {
+  display: block;
+}
+.react-modal-api-visible .react-modal-api {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /*# sourceMappingURL=styles.css.map */

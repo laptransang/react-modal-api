@@ -1,7 +1,5 @@
 import React from 'react';
 
-import classNames from 'utils/classNames';
-
 interface IMask {
   prefixCls: string;
   visible: boolean;
@@ -10,8 +8,10 @@ interface IMask {
 function Mask(props: IMask) {
   const { prefixCls, visible } = props;
 
+  console.log('visible', visible);
+
   return (
-    <div className={classNames(`${prefixCls}-mask`, {[`${prefixCls}-mask--hidden`]: !visible })} />
+    <div className={`${prefixCls}-mask`} />
   );
 }
 
