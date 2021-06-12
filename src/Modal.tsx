@@ -1,28 +1,46 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
 
-import PortalWrapper from 'PortalWrapper';
-import { IModalPropTypes } from 'types/IModalPropTypes';
-import './styles.css';
 import store from 'store';
-import switchScrollingEffect from 'utils/switchScrollingEffect';
-import CloseIcon from 'components/CloseIcon';
+import { IModalPropTypes } from 'types/IModalPropTypes';
+import PortalWrapper from 'PortalWrapper';
 import Mask from 'components/Mask';
 import Wrap from 'components/Wrap';
 import Content from 'components/Content';
+import CloseIcon from 'components/CloseIcon';
 import classNames from 'utils/classNames';
+import switchScrollingEffect from 'utils/switchScrollingEffect';
 
-function Modal(props: IModalPropTypes) {
-  const {
-    width,
-    onClose,
-    centered,
-    visible,
-    keyboard,
-    children,
-    prefixCls,
-    closeIcon,
-    destroyOnClose
-  } = props;
+import './styles.css';
+
+let mousePosition: { x: number; y: number } | null;
+
+const getClickPosition = (e: MouseEvent) => {
+  mousePosition = {
+    x: e.pageX,
+    y: e.pageY,
+  };
+
+  setTimeout(() => {
+    mousePosition = null;
+  }, 100);
+};
+
+if (typeof window !== 'undefined' && window.document && window.document.documentElement) {
+  document.documentElement.addEventListener('click', getClickPosition, true);
+}
+
+function Modal({
+  width,
+  onClose,
+  centered,
+  visible,
+  keyboard,
+  children,
+  prefixCls,
+  closeIcon,
+  destroyOnClose
+}: IModalPropTypes) {
+  const [animatedVisible, setAnimatedVisible] = useState(visible);
   const modalRootRef = useRef(null);
   const contentRef = useRef(null);
 
@@ -48,25 +66,36 @@ function Modal(props: IModalPropTypes) {
     }
   }, [visible])
 
+  useEffect(() => {
+    if (visible) {
+      setAnimatedVisible(true);
+    }
+  }, [visible])
+
+  const onExit = () => {
+    setAnimatedVisible(false)
+  }
 
   if (visible || !destroyOnClose) {
-    console.log('visible', visible);
     return (
-      <PortalWrapper visible={visible}>
+      <PortalWrapper visible={animatedVisible}>
         <div className={classNames(`${prefixCls}-root`, {[`${prefixCls}-visible`]: visible })} ref={modalRootRef}>
           <Mask prefixCls={prefixCls} visible={visible} />
           <Wrap
             prefixCls={prefixCls}
-            visible={visible}
+            visible={animatedVisible}
             centered={centered}
             onClose={close}
             keyboard={keyboard}
             onFocus={handleFocus}
           >
             <Content
+              visible={visible}
               prefixCls={prefixCls}
               width={width}
+              mousePosition={mousePosition}
               ref={contentRef}
+              onExit={onExit}
             >
               <CloseIcon prefixCls={prefixCls} onClick={close} closeIcon={closeIcon} />
               {children}
@@ -76,6 +105,7 @@ function Modal(props: IModalPropTypes) {
       </PortalWrapper>
     );
   }
+
   return null;
 }
 

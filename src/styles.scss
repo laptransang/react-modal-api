@@ -4,11 +4,81 @@ $prefixCls: 'react-modal-api';
   margin: 0 auto;
   position: relative;
   width: 100%;
-  transform: scale(0.7);
-  opacity: 0;
-  transition: all 0.3s ease-in-out;
-  //visibility: hidden;
   top: 0;
+
+  $this: &;
+
+  //Begin Zoom Effect
+  &-zoom-appear,&-zoom-enter{
+    opacity:0;
+    visibility: visible;
+    animation-duration:.3s;
+    animation-fill-mode:both;
+    animation-timing-function:cubic-bezier(.08,.82,.17,1);
+    animation-play-state:paused
+  }
+
+  &-zoom-appear-active, &-zoom-enter-active
+  {
+    visibility: visible;
+    animation-name: modalApiZoomIn;
+    animation-play-state:running;
+  }
+
+  &-zoom-exit
+  {
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.6, 0.04, 0.98, 0.34);
+    animation-play-state: paused;
+  }
+
+  &-zoom-exit-active
+  {
+    animation-name:modalApiZoomOut;
+    animation-play-state:running;
+  }
+
+  &-zoom-exit-done{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  //End Zoom Effect
+
+  //Begin Fade Effect
+  &-fade-appear,&-fade-enter{
+    opacity:0;
+    visibility: visible;
+    animation-duration:.3s;
+    animation-fill-mode:both;
+    animation-timing-function:cubic-bezier(.55,0,.55,.2);
+    animation-play-state:paused
+  }
+
+  &-fade-appear-done,&-fade-enter-done{
+    visibility: visible;
+    animation-name:modalApiFadeIn;
+    animation-play-state:running;
+  }
+
+  &-fade-exit{
+    animation-duration:.3s;
+    animation-fill-mode:both;
+    animation-timing-function:cubic-bezier(.55,0,.55,.2);
+    animation-play-state:paused;
+  }
+
+  &-fade-exit-active{
+    animation-name:modalApiFadeOut;
+    animation-play-state:running
+  }
+
+  &-fade-exit-done{
+    opacity: 0;
+    visibility: hidden;
+  }
+  //End Fade Effect
 }
 
 .#{$prefixCls}-centered {
@@ -31,17 +101,14 @@ $prefixCls: 'react-modal-api';
 
 .#{$prefixCls}-mask {
   z-index: 1000;
-  top: -100vh;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: #00000073;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  visibility: hidden;
+  background: #00000073;
 }
 
 .#{$prefixCls}-wrap {
@@ -53,7 +120,6 @@ $prefixCls: 'react-modal-api';
   overflow: auto;
   outline: 0;
   z-index: 1000;
-  display: none;
 }
 
 .#{$prefixCls}-content {
@@ -87,21 +153,39 @@ $prefixCls: 'react-modal-api';
   }
 }
 
-.#{$prefixCls}-visible {
-  .#{$prefixCls}-mask {
-    opacity: 1;
-    visibility: visible;
-    top: 0;
+@keyframes modalApiZoomIn{
+  0%{
+    opacity:0;
+    transform:scale(0)
   }
-
-  .#{$prefixCls}-wrap {
-    display: block;
+  100%{
+    opacity:1;
+    transform:scale(1)
   }
+}
+@keyframes modalApiZoomOut{
+  0%{
+    transform:scale(1)
+  }
+  100%{
+    opacity:0;
+    transform:scale(0)
+  }
+}
 
-  .#{$prefixCls} {
-    opacity: 1;
-    //top: 0;
-    //visibility: visible;
-    transform: scale(1);
+@keyframes modalApiFadeIn{
+  0%{
+    opacity:0
+  }
+  100%{
+    opacity:1
+  }
+}
+@keyframes modalApiFadeOut{
+  0%{
+    opacity:1
+  }
+  100%{
+    opacity:0
   }
 }

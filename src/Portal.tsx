@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 interface IPortal {
@@ -8,24 +8,22 @@ interface IPortal {
 }
 
 const Portal= (props: IPortal) => {
-  const [ container, setContainer ] = useState(null);
   const { children, getContainer } = props;
+  const containerRef = useRef<HTMLElement>();
+  const initRef = useRef(false);
+
+  if (!initRef.current) {
+    containerRef.current = getContainer();
+    initRef.current = true;
+  }
 
   useEffect(() => {
-    setContainer(getContainer());
-
     return () => {
-      if (container) {
-        container.parentNode.removeChild(container.current);
-      }
+      containerRef.current.parentNode.removeChild(containerRef.current);
     }
   }, [])
 
-  if (container) {
-    return ReactDOM.createPortal(children, container);
-  }
-
-  return null;
+  return containerRef.current ? ReactDOM.createPortal(children, containerRef.current) : null;
 }
 
 export default Portal;

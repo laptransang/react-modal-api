@@ -13,8 +13,8 @@ type Props = {
   children: ReactNode;
 }
 
-function Wrap(props: Props) {
-  const { prefixCls, visible, centered, keyboard, onClose, onFocus, children } = props;
+function Wrap({ prefixCls, visible, centered, keyboard, onClose, onFocus, children }: Props) {
+  // const [transitionVisible, setTransitionVisible] = useState(visible)
 
   function handleWrapClick(e: any) {
     if (e.target === e.currentTarget) {
@@ -37,12 +37,19 @@ function Wrap(props: Props) {
     }
   }
 
+  // useEffect(() => {
+  //   if (visible) {
+  //     setTransitionVisible(true)
+  //   }
+  // }, [visible])
+
   return (
     <div
       tabIndex={-1}
       className={classNames(`${prefixCls}-wrap`, {[`${prefixCls}-centered`]: centered})} role="dialog"
       onKeyDown={handleKeyDown}
       onClick={handleWrapClick}
+      style={{ display: visible ? null : 'none' }}
     >
       {children}
     </div>
