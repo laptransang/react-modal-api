@@ -1,33 +1,12 @@
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import React, { useRef } from 'react';
 
-import store from 'store';
 import { IModalPropTypes } from 'types/IModalPropTypes';
 import PortalWrapper from 'PortalWrapper';
-import Mask from 'components/Mask';
-import Wrap from 'components/Wrap';
-import Content from 'components/Content';
-import CloseIcon from 'components/CloseIcon';
-import classNames from 'utils/classNames';
-import switchScrollingEffect from 'utils/switchScrollingEffect';
+import { Mask, Wrap, Content, CloseIcon } from 'components'
+import { classNames, getMousePosition } from 'utils'
+import { useAnimationVisible, useElementFocus, useSwitchScrollingEffect } from './hooks'
 
 import './styles.css';
-
-let mousePosition: { x: number; y: number } | null;
-
-const getClickPosition = (e: MouseEvent) => {
-  mousePosition = {
-    x: e.pageX,
-    y: e.pageY,
-  };
-
-  setTimeout(() => {
-    mousePosition = null;
-  }, 100);
-};
-
-if (typeof window !== 'undefined' && window.document && window.document.documentElement) {
-  document.documentElement.addEventListener('click', getClickPosition, true);
-}
 
 function Modal({
   width,
@@ -40,40 +19,19 @@ function Modal({
   closeIcon,
   destroyOnClose
 }: IModalPropTypes) {
-  const [animatedVisible, setAnimatedVisible] = useState(visible);
+  const { animatedVisible, onAnimationExit } = useAnimationVisible(visible)
   const modalRootRef = useRef(null);
   const contentRef = useRef(null);
+  const mousePosition = getMousePosition()
+  const { onElementFocus } = useElementFocus(contentRef)
+  const { switchScrollingEffect } = useSwitchScrollingEffect(visible)
 
-  function close(e: React.MouseEvent | React.KeyboardEvent): void {
-    store.setOpenCount(store.openCount - 1);
+  const handleClose = (e: React.MouseEvent | React.KeyboardEvent): void => {
     switchScrollingEffect({ close: true });
 
     if (onClose) {
       onClose(e);
     }
-  }
-
-  function handleFocus(e: React.KeyboardEvent<HTMLDivElement>) {
-    contentRef.current.changeActive(!e.shiftKey)
-  }
-
-  useLayoutEffect(() => {
-    if (visible) {
-      store.setOpenCount(store.openCount + 1);
-      if (store.openCount === 1) {
-        switchScrollingEffect();
-      }
-    }
-  }, [visible])
-
-  useEffect(() => {
-    if (visible) {
-      setAnimatedVisible(true);
-    }
-  }, [visible])
-
-  const onExit = () => {
-    setAnimatedVisible(false)
   }
 
   if (visible || !destroyOnClose) {
@@ -85,9 +43,9 @@ function Modal({
             prefixCls={prefixCls}
             visible={animatedVisible}
             centered={centered}
-            onClose={close}
+            onClose={handleClose}
             keyboard={keyboard}
-            onFocus={handleFocus}
+            onFocus={onElementFocus}
           >
             <Content
               visible={visible}
@@ -95,7 +53,7 @@ function Modal({
               width={width}
               mousePosition={mousePosition}
               ref={contentRef}
-              onExit={onExit}
+              onExit={onAnimationExit}
             >
               <CloseIcon prefixCls={prefixCls} onClick={close} closeIcon={closeIcon} />
               {children}

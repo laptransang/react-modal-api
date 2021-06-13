@@ -20,11 +20,4 @@ function getParent(getContainer: any) {
   return document.body;
 }
 
-/**
- * getScrollbarWidth
- */
-function getScrollbarWidth() {
-  return window.innerWidth - document.documentElement.clientWidth;
-}
-
-export { getParent, getScrollbarWidth }
+export default getParent

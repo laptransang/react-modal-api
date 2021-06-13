@@ -1,8 +1,8 @@
 import React, { useRef, forwardRef, useImperativeHandle, ReactNode } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { offset } from 'utils/offset';
 import { IModalPropTypes } from 'types/IModalPropTypes';
+import { useElementTransformWithMousePosition } from 'hooks'
 
 interface ContentProps extends IModalPropTypes{
   prefixCls: string;
@@ -21,11 +21,10 @@ const Content = forwardRef<ContentRef, ContentProps>((props, ref) => {
     prefixCls,
     width,
     visible,
-    mousePosition,
     onExit,
     children
   } = props;
-  const [transformOrigin, setTransformOrigin] = React.useState<string>();
+  const { onTriggerElement, transformOriginValue } = useElementTransformWithMousePosition()
   const contentStartRef = useRef(null);
   const contentEndRef = useRef(null);
   const contentBoundaryStyle = { width: 0, height: 0, overflow: 'hidden', outline: 'none' };
@@ -42,26 +41,16 @@ const Content = forwardRef<ContentRef, ContentProps>((props, ref) => {
     }
   }))
 
-  const onEnter = (node: any): void => {
-    const elementOffset = offset(node);
-
-    setTransformOrigin(
-      mousePosition
-        ? `${mousePosition.x - elementOffset.left}px ${mousePosition.y - elementOffset.top}px`
-        : '',
-    );
-  }
-
   return (
     <CSSTransition
       in={visible}
       classNames={`${prefixCls}-zoom`}
-      onEnter={onEnter}
+      onEnter={onTriggerElement}
       timeout={{ appear: 200, enter: 200, exit: 200 }}
       onExited={onExit}
       appear
     >
-      <div className={`${prefixCls}`} role="document" style={{ maxWidth: width, transformOrigin }}>
+      <div className={`${prefixCls}`} role="document" style={{ maxWidth: width, transformOrigin: transformOriginValue }}>
         <div ref={contentStartRef} tabIndex={0} aria-hidden="true" style={contentBoundaryStyle} />
         <div className={`${prefixCls}-content`}>
           {children}

@@ -15,7 +15,7 @@ function getScroll(w: Window, top?: boolean): number {
   return ret;
 }
 
-export function offset(el: Element) {
+function getElementOffset(el: Element) {
   const rect = el.getBoundingClientRect();
   const pos = {
     left: rect.left,
@@ -27,3 +27,5 @@ export function offset(el: Element) {
   pos.top += getScroll(w, true);
   return pos;
 }
+
+export default getElementOffset

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
-import classNames from 'utils/classNames';
-import KeyCode from 'utils/KeyCode';
+import { classNames } from 'utils';
+import { useWrapElement } from 'hooks'
 
 type Props = {
   prefixCls: string;
@@ -13,42 +13,15 @@ type Props = {
   children: ReactNode;
 }
 
-function Wrap({ prefixCls, visible, centered, keyboard, onClose, onFocus, children }: Props) {
-  // const [transitionVisible, setTransitionVisible] = useState(visible)
-
-  function handleWrapClick(e: any) {
-    if (e.target === e.currentTarget) {
-      onClose(e);
-    }
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    if (keyboard && e.keyCode === KeyCode.ESC) {
-      e.stopPropagation();
-      onClose(e);
-      return;
-    }
-
-    // keep focus inside dialog
-    if (visible && e.keyCode === KeyCode.TAB) {
-      if (onFocus) {
-        onFocus(e);
-      }
-    }
-  }
-
-  // useEffect(() => {
-  //   if (visible) {
-  //     setTransitionVisible(true)
-  //   }
-  // }, [visible])
+const Wrap = ({ prefixCls, visible, centered, keyboard, onClose, onFocus, children }: Props) => {
+  const { onWrapClick, onKeyDown } = useWrapElement({ visible, keyboard, onClose, onFocus })
 
   return (
     <div
       tabIndex={-1}
       className={classNames(`${prefixCls}-wrap`, {[`${prefixCls}-centered`]: centered})} role="dialog"
-      onKeyDown={handleKeyDown}
-      onClick={handleWrapClick}
+      onKeyDown={onKeyDown}
+      onClick={onWrapClick}
       style={{ display: visible ? null : 'none' }}
     >
       {children}

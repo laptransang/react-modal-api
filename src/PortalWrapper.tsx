@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import { getParent } from './utils/container';
+import { getParent } from 'utils';
 import Portal from './Portal';
 
 type Props = {
